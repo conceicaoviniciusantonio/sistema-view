@@ -1,0 +1,60 @@
+<div style="height: 100vh;">
+    <mat-toolbar color="primary">
+      <mat-toolbar-row>
+        <button mat-icon-button (click)="sidenav.toggle()" fxShow="true" fxHide.gt-sm>
+          <mat-icon>menu</mat-icon>
+        </button>
+  
+        <span>Sistema de Cadastro</span>
+  
+        <span class="example-spacer"></span>
+  
+        <div fxShow="true" fxHide.lt-md="true">
+          <a href="javascript:void(0)" mat-button [matMenuTriggerFor]="appMenu">
+            <mat-icon>notifications</mat-icon>
+            Cadastros
+          </a>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  
+    <mat-menu #appMenu="matMenu">
+      <button (click)="clickMenuItem('cadastros/pessoa')" mat-menu-item>Pessoas</button>
+    </mat-menu>
+  
+  
+    <mat-sidenav-container fxFlexFill>
+      <mat-sidenav #sidenav>
+        <mat-nav-list>
+          <a href="javascript:void(0)" mat-list-item [matMenuTriggerFor]="appMenu">
+            <mat-icon>notifications</mat-icon>
+            Cadastros
+          </a>
+  
+          <a href="javascript:void(0)" mat-list-item>
+            <mat-icon>message</mat-icon>
+            Notas/Faltas
+          </a>
+  
+          <a href="javascript:void(0)" mat-list-item>
+            <mat-icon>lock</mat-icon>
+            Meus Dados
+          </a>
+  
+          <a href="javascript:void(0)" (click)="sidenav.toggle()" mat-list-item>
+            <mat-icon>close</mat-icon> Fechar
+          </a>
+        </mat-nav-list>
+      </mat-sidenav>
+  
+      <mat-sidenav-content fxFlexFill>
+  
+        <div class="container">
+          <router-outlet></router-outlet>
+        </div>
+  
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+  
+  

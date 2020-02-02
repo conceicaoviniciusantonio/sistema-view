@@ -1,0 +1,19 @@
+.mat-column-id {
+    width: 50px;
+}
+
+.mat-column-nome {
+    width: 100px;
+}
+
+.mat-column-dataNascimento {
+    width: 300px;
+}
+
+.mat-column-cidade {
+    width: 300px;
+}
+
+.mat-column-buttons {
+    width: 120px;
+}

@@ -1,0 +1,14 @@
+<h1 mat-dialog-title [innerHTML]="title"></h1>
+<div mat-dialog-content>
+  <div [innerHTML]="message"></div>
+</div>
+<div mat-dialog-actions>
+  <div class="container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+    <div fxFlex="50%" *ngIf="showCancelButton">
+      <button mat-raised-button (click)="onCancelButtonClick()" color="accent">{{ cancelButtonText }}</button>
+    </div>
+    <div fxFlex="50%" *ngIf="showOkButton">
+      <button mat-raised-button cdkFocusInitial (click)="onOkButtonClick()" color="primary">{{ okButtonText }}</button>
+    </div>
+  </div>
+</div>
