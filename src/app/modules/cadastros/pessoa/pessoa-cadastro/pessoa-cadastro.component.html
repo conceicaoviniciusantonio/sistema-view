@@ -1,120 +1,145 @@
 <mat-card>
-    <mat-card-title>
-      Cadastro de Pessoas
-    </mat-card-title>
-    <mat-card-subtitle>
-      Cadastrar pessoa no Sistema
-    </mat-card-subtitle>
-  
-    <form [formGroup] = "formulario" (ngSubmit)="salvar()">
-  
-      <mat-card-content>
+  <mat-card-title>
+    Cadastro de Pessoas
+  </mat-card-title>
+  <mat-card-subtitle>
+    Cadastrar pessoa no Sistema
+  </mat-card-subtitle>
 
-        <div class="container example-container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
-            
-            <div fxFlex="80%">
+  <form [formGroup]="formulario" (ngSubmit)="salvar()">
+
+    <mat-card-content>
+
+      <mat-horizontal-stepper [linear]="isLinear" #stepper>
+        <mat-step [stepControl]="formulario" label="Dados">
+
+          <div class="container example-container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%"
+            fxLayoutAlign="center">
+
+            <div fxFlex="60%">
               <mat-form-field>
-                <input  autofocus="autofocus"  formControlName="nome" matInput placeholder="Nome" required/>
+                <input autofocus="autofocus" formControlName="nome" matInput placeholder="Nome" required />
                 <mat-error *ngIf="formulario.invalid">{{getErrorMessage()}}</mat-error>
               </mat-form-field>
             </div>
-            
+
+            <div fxFlex="40%">
+              <mat-form-field>
+                <input matInput  [matDatepicker]="picker" placeholder="Data de Nascimento"
+                  formControlName="dataNascimento" required>
+                  <mat-error *ngIf="formulario.invalid">{{getErrorMessage()}}</mat-error>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div>
+            <div fxFlex="80%"></div>
             <div fxFlex="20%">
-                <mat-form-field>
-                    <input matInput [matDatepicker]="picker" placeholder="Selecione a data" formControlName="dataNascimento" required>
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                    <mat-error *ngIf="formulario.invalid">{{getErrorMessage()}}</mat-error>
-                </mat-form-field>
+              <button mat-raised-button matStepperNext color="primary">Próximo <mat-icon>arrow_forward</mat-icon>
+              </button>
             </div>
-        </div>
+          </div>
+        </mat-step>
 
-        <div class="container example-container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+        <mat-step label="Endereço">
+          <div class="container example-container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%"
+            fxLayoutAlign="center">
             <div fxFlex="50%">
-                <mat-form-field>
-                    <input  formControlName="rua" matInput placeholder="rua" required/>
-                    <mat-error *ngIf="formulario.invalid">{{getErrorMessage()}}</mat-error>
-                </mat-form-field>
+              <mat-form-field>
+                <input formControlName="rua" matInput placeholder="Rua" />
+              </mat-form-field>
             </div>
 
             <div fxFlex="50%">
-                <mat-form-field>
-                    <input  formControlName="cep" matInput placeholder="cep" required/>
-                    <mat-error *ngIf="formulario.invalid">{{getErrorMessage()}}</mat-error>
-                </mat-form-field>
+              <mat-form-field>
+                <input class="cep" mask="00000-000" formControlName="cep" matInput placeholder="CEP" />
+              </mat-form-field>
             </div>
-        </div>
-
-        <div class="container example-container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+          </div>
+          
+          <div class="container example-container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%"
+            fxLayoutAlign="center">
             <div fxFlex="30%">
-                <mat-form-field>
-                    <input  formControlName="numero" matInput placeholder="numero" required/>
-                    <mat-error *ngIf="formulario.invalid">{{getErrorMessage()}}</mat-error>
-                </mat-form-field>
+              <mat-form-field>
+                <input type="number" formControlName="numero" matInput placeholder="Número" />
+              </mat-form-field>
             </div>
 
             <div fxFlex="40%">
-                <mat-form-field>
-                    <input  formControlName="cidade" matInput placeholder="cidade" required/>
-                    <mat-error *ngIf="formulario.invalid">{{getErrorMessage()}}</mat-error>
-                </mat-form-field>
+              <mat-form-field>
+                <input formControlName="cidade" matInput placeholder="Cidade" />
+              </mat-form-field>
             </div>
 
             <div fxFlex="30%">
-                <mat-form-field>
-                    <input  formControlName="estado" matInput placeholder="estado" required/>
-                    <mat-error *ngIf="formulario.invalid">{{getErrorMessage()}}</mat-error>
-                </mat-form-field>
+              <mat-form-field>
+                <input formControlName="estado" matInput placeholder="Estado" />
+              </mat-form-field>
             </div>
-         </div>
+          </div>
+          <div>
+            <div fxFlex="20%">
+              <button mat-raised-button matStepperPrevious color="primary">
+                <mat-icon>arrow_back</mat-icon> Voltar
+              </button>
+            </div>
+            <div fxFlex="60%"></div>
+            <div fxFlex="20%">
+              <button mat-raised-button matStepperNext  color="primary">Próximo <mat-icon>arrow_forward</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-step>
 
-         <div class="container example-container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
+        <mat-step label="Contato">
+          <div class="container example-container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%"
+            fxLayoutAlign="center">
             <div fxFlex="50%">
-                <mat-form-field>
-                    <input  formControlName="telefoneFixo" matInput placeholder="telefoneFixo" required/>
-                    <mat-error *ngIf="formulario.invalid">{{getErrorMessage()}}</mat-error>
-                </mat-form-field>
+              <mat-form-field>
+                <input mask="(00) 00000-0000" formControlName="telefoneFixo" matInput placeholder="Telefone Fixo" />
+              </mat-form-field>
             </div>
 
             <div fxFlex="50%">
-                <mat-form-field>
-                    <input  formControlName="telefoneCelular" matInput placeholder="telefoneCelular" required/>
-                    <mat-error *ngIf="formulario.invalid">{{getErrorMessage()}}</mat-error>
-                </mat-form-field>
-            </div> 
+              <mat-form-field>
+                <input mask="(00) 00000-0000" formControlName="telefoneCelular" matInput placeholder="Celular" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="container example-container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%">
+            <div fxFlex="20%">
+              <button mat-raised-button matStepperPrevious color="primary">
+                <mat-icon>arrow_back</mat-icon> Voltar
+              </button>
+            </div>
+            <div fxFlex="60%"></div>
+            <div fxFlex="20%" *ngIf="isEnabled()">
+              <button mat-raised-button (click)="finalizar()"  color="primary">Finalizar <mat-icon>check</mat-icon>
+                </button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <div class="container example-container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%">
+        <div fxFlex="20%">
+          <button mat-button (click)="voltar()">
+            <mat-icon>arrow_back</mat-icon>
+            Voltar para consultas
+          </button>
         </div>
-         
-      </mat-card-content>
-  
-      <mat-card-actions>
-        <div class="container example-container" fxLayout="row" fxLayout.xs="column" fxLayoutWrap fxLayoutGap="0.5%" fxLayoutAlign="center">
-  
-          <div fxFlex="60%"></div>
-  
-          <div fxFlex="20%" *ngIf="!isExcluirEnabled() && !isSalvarEnabled()">
-          </div>
-  
-          <div fxFlex="20%" *ngIf="isExcluirEnabled()">
-            <button mat-raised-button color="accent" (click)="excluir()">
-              <mat-icon>delete</mat-icon>
-              Excluir
-            </button>
-          </div>
-  
-          <div fxFlex="20%" *ngIf="isSalvarEnabled()">
-            <button [disabled]="!isValidForm()" type="submit" mat-raised-button color="primary">
-              <mat-icon>save</mat-icon>
-              Salvar
-            </button>
-          </div>
-  
-          <div fxFlex="20%">
-            <button mat-raised-button color="primary" (click)="voltar()">
-              <mat-icon>history</mat-icon>
-              Voltar
-            </button>
-          </div>
+        <div fxFlex="80%"></div>
+        <div fxFlex="20%" *ngIf="isExcluirEnabled()">
+          <button mat-raised-button color="accent" (click)="excluir()">
+            <mat-icon>delete</mat-icon>
+            Excluir
+          </button>
         </div>
-      </mat-card-actions>
+      </div>
+    </mat-card-actions>
   </form>
-  </mat-card>
+</mat-card>

@@ -10,6 +10,10 @@ import { GeralModule } from '../../geral/geral.module';
 import { PessoaService } from './pessoa.service';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { NgxMaskModule, IConfig } from 'ngx-mask'
+
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = {}
+
 
 @NgModule({
   declarations: [
@@ -21,7 +25,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     PessoaRoutingModule,
     PluginsModule,
     GeralModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxMaskModule.forRoot(options)
   ],
   providers: [PessoaService]
 })

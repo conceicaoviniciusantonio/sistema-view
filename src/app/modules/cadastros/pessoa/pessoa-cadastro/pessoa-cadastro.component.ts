@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PessoaService } from '../pessoa.service';
 import { MensagemService } from 'src/app/modules/geral/mensagem/mensagem.service';
 import { NotificacaoService } from 'src/app/modules/geral/notificacao/notificacao.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-pessoa-cadastro',
@@ -13,15 +13,20 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 })
 export class PessoaCadastroComponent implements OnInit {
 
-  formulario : FormGroup;
+  formulario: FormGroup;
 
   acao: string = '';
   inscricoes: Subscription[] = [];
+
+  public customPatterns = { '0': { pattern: new RegExp('\[a-zA-Z\]')} };
 
   linear = true;
   primeiroGrupo: FormGroup;
   segundoGrupo: FormGroup;
   terceiroGrupo: FormGroup;
+  isLinear: boolean;
+  idCadastro: number;
+
 
   constructor(
     private activeRoute: ActivatedRoute,
@@ -32,22 +37,21 @@ export class PessoaCadastroComponent implements OnInit {
     private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    
-    this.formulario = this.formBuilder.group({
-      id: [null],
-      nome: [null, Validators.required],
-      dataNascimento: [null],
-      data: [null],
-      rua: [null],
-      cep: [null],
-      numero: [null],
-      cidade: [null],
-      estado: [null],
-      telefoneFixo: [null],
-      telefoneCelular: [null],
-    });
 
     this.acao = this.activeRoute.snapshot.url[0].path;
+
+    this.formulario = new FormGroup({
+      id: new FormControl(),
+      nome: new FormControl({ value: '', disabled: !this.isEnabled() }, Validators.required),
+      dataNascimento: new FormControl({ value: '', disabled: !this.isEnabled() }, Validators.required),
+      rua: new FormControl({ value: '', disabled: !this.isEnabled() }),
+      cep: new FormControl({ value: '', disabled: !this.isEnabled() }),
+      numero: new FormControl({ value: '', disabled: !this.isEnabled() }),
+      cidade: new FormControl({ value: '', disabled: !this.isEnabled() }),
+      estado: new FormControl({ value: '', disabled: !this.isEnabled() }),
+      telefoneFixo: new FormControl({ value: '', disabled: !this.isEnabled() }),
+      telefoneCelular: new FormControl({ value: '', disabled: !this.isEnabled() })
+    });
 
     let s1 = this.activeRoute.params.subscribe((dados) => {
       if (dados['id']) {
@@ -56,6 +60,9 @@ export class PessoaCadastroComponent implements OnInit {
     });
 
     this.inscricoes.push(s1);
+
+    this.isLinear = true;
+
   }
 
 
@@ -63,17 +70,28 @@ export class PessoaCadastroComponent implements OnInit {
     this.router.navigate(['cadastros', 'pessoa']);
   }
 
+  finalizar() {
+    this.salvar();
+    this.ntf.openSnackBar(this.acao);
+    this.voltar();
+  }
+
   salvar() {
+
     if (this.acao == 'new') {
-      let s = this.pessoaService.insert(this.formulario.value).subscribe((r) => {
-        this.ntf.openSnackBar(this.acao);
-        this.voltar();
-      }, (error) => this.inscricoes.push(this.msg.msgErroCadastro(error).subscribe((result) => null)));
-      this.inscricoes.push(s);
+      if (this.idCadastro == null) {
+        let s = this.pessoaService.insert(this.formulario.value).subscribe((r) => {
+          this.idCadastro = r.id;
+        }, (error) => this.inscricoes.push(this.msg.msgErroCadastro(error).subscribe((result) => null)));
+        this.inscricoes.push(s);
+      } else {
+        this.formulario.value.id = this.idCadastro;
+        let s = this.pessoaService.update(this.formulario.value).subscribe((r) => {
+        }, (error) => this.inscricoes.push(this.msg.msgErroCadastro(error).subscribe((result) => null)));
+        this.inscricoes.push(s);
+      }
     } else if (this.acao == 'edit') {
       let s = this.pessoaService.update(this.formulario.value).subscribe((r) => {
-        this.ntf.openSnackBar(this.acao);
-        this.voltar();
       }, (error) => this.inscricoes.push(this.msg.msgErroCadastro(error).subscribe((result) => null)));
       this.inscricoes.push(s);
     }
@@ -92,10 +110,10 @@ export class PessoaCadastroComponent implements OnInit {
     this.inscricoes.push(s);
   }
 
-  isValidForm(){
+  isValidForm() {
     return this.formulario.status == "VALID"
   }
-  
+
   atualizaCampos(dados) {
     this.formulario.patchValue({
       id: dados.id,
@@ -110,7 +128,7 @@ export class PessoaCadastroComponent implements OnInit {
       telefoneCelular: dados.telefoneCelular,
     });
   }
-  
+
   getErrorMessage() {
     return 'Este campo é obrigatório!'
   }
