@@ -108,6 +108,8 @@ export class PessoaCadastroComponent implements OnInit {
     }, (error) => this.inscricoes.push(this.msg.msgErroCadastro(error).subscribe((result) => null)));
 
     this.inscricoes.push(s);
+    this.ntf.openSnackBar(this.acao);
+    this.voltar();
   }
 
   isValidForm() {
